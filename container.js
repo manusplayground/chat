@@ -7,16 +7,16 @@ const dependencies = [
     ['_', 'lodash']
 ];
 
-dependencies.forEach((dependency) => {
-    container.register(dependency[0], () => {
-        return dependency[1];
+dependencies.forEach(function(dependency) {
+    container.register(dependency[0], function() {
+        return require(dependency[1]);
     })
 });
 
 container.load(path.join(__dirname, "/controllers"));
 container.load(path.join(__dirname, "/helpers"));
 
-container.register("container", () => {
+container.register("container", function() {
     return container;
 });
 
