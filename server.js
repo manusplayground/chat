@@ -17,8 +17,8 @@ container.resolve(function(users) {
     function setupExpress() {
         const app = express();
         const server = http.createServer(app);
-        server.listen('8888', () => {
-            console.log("listening on port 8888");
+        server.listen('8877', () => {
+            console.log("listening on port 8877");
         });
 
         configureExpress(app);
@@ -40,7 +40,7 @@ container.resolve(function(users) {
         app.use(session({
             secret: "kimmiethepoodledumb",
             resave: true,
-            saveInitialized: true,
+            saveUninitialized: false,
             store: new MongoStore({mongooseConnection: mongoose.connection})
         }));
         app.use(passport.initialize());
