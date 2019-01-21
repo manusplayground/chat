@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo")(session);
 const flash = require("connect-flash");
 const mongoose = require("mongoose");
+const passport = require("passport");
 const container = require("./container");
 
 container.resolve(function(users) {
@@ -42,6 +43,8 @@ container.resolve(function(users) {
             saveInitialized: true,
             store: new MongoStore({mongooseConnection: mongoose.connection})
         }));
+        app.use(passport.initialize());
+        app.use(passport.session());
         app.use(flash());
     }
 })
