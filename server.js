@@ -2,9 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const http = require("http");
 const ejs = require("ejs");
-const dependencies = require("./container");
+const container = require("./container");
 
-dependencies.resolve(() => {
+container.resolve(function(users) {
     const app = setupExpress();
 
     function setupExpress() {
@@ -17,13 +17,15 @@ dependencies.resolve(() => {
         configureExpress(app);
 
         const router = require("express-promise-router")();
+       
+        users.setRouting(router);
 
         app.use(router);
     }
 
     function configureExpress(app) {
         app.use(express.static("public"));
-        app.set("view-engine", "ejs");
+        app.set("view engine", "ejs");
         app.set(bodyParser.json());
         app.set(bodyParser.urlencoded({extended: true}));
     }
