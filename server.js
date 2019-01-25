@@ -11,7 +11,11 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const container = require("./container");
 
-container.resolve(function(users) {
+container.resolve(function(users, _) {
+
+    mongoose.Promise = global.Promise;
+    mongoose.connect('mongodb://localhost/chat');
+
     const app = setupExpress();
 
     function setupExpress() {
@@ -31,6 +35,8 @@ container.resolve(function(users) {
     }
 
     function configureExpress(app) {
+        require("./passport/passport-local");
+        
         app.use(express.static("public"));
         app.set("view engine", "ejs");
         app.use(bodyParser.json());
@@ -46,5 +52,10 @@ container.resolve(function(users) {
         app.use(passport.initialize());
         app.use(passport.session());
         app.use(flash());
+
+        app.use(passport.initialize());
+        app.use(passport.session());
+
+        app.locals._ = _;
     }
 })
