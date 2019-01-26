@@ -7,15 +7,17 @@ module.exports = function(_, passport, UserUtils) {
             router.get("/signup", this.signupPage);
             router.post("/signup", UserUtils.signupValidation, this.postSignUp);
             router.get("/home", this.homePage);
+            router.post("/login", UserUtils.loginValidation, this.postSignIn);
         },
 
         indexPage: function(req, res) {
-            return res.render("index");
+            const errors = req.flash("error");
+            return res.render("index", {title: "Chat | Login", messages: errors, hasErrors: errors.length > 0});
         },
 
         signupPage: function(req, res) {
             const errors = req.flash("error");
-            return res.render("signup", {title: "Chat | Login", messages: errors, hasErrors: errors.length > 0});
+            return res.render("signup", {title: "Chat | User Registration", messages: errors, hasErrors: errors.length > 0});
         },
 
         postSignUp: passport.authenticate("local.signup", {
@@ -27,5 +29,11 @@ module.exports = function(_, passport, UserUtils) {
         homePage: function(req, res) {
             return res.render("home");
         },
+
+        postSignIn: passport.authenticate("local.login", {
+            successRedirect: "/home",
+            failureRedirect: "/",
+            failureFlash: true
+        }),
     }
 }
